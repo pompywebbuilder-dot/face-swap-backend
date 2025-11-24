@@ -1,28 +1,23 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from openai import OpenAI
 import uvicorn
 import os
-from openai import OpenAI
-from io import BytesIO
 
-# Load API Key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = FastAPI()
 
-# Allow frontend access
 app.add_middleware(
-    CORSMiddleware,
+    CORSMMiddleware,
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
 @app.get("/")
 def home():
-    return {"status": "Your Face Swap backend is running!"}
-
+    return {"status": "Backend is running!"}
 
 @app.post("/swap-face")
 async def swap_face(source: UploadFile = File(...), target: UploadFile = File(...)):
@@ -40,7 +35,5 @@ async def swap_face(source: UploadFile = File(...), target: UploadFile = File(..
 
     return {"image": result.data[0].url}
 
-
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=10000)
-
