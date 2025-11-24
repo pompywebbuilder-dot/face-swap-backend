@@ -21,20 +21,24 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def home():
     return {"status": "Backend Running Successfully"}
 
-@app.post("/swap")
-async def swap_face(source: UploadFile = File(...), target: UploadFile = File(...)):
+# MAIN WORKING ROUTE (Frontend uses this route)
+@app.post("/swap-image")
+async def swap_image(
+    source_image: UploadFile = File(...),
+    target_image: UploadFile = File(...)
+):
     try:
         result = client.images.generate(
             model="gpt-image-1",
             prompt="swap these faces naturally",
             image=[
-                source.file,
-                target.file
+                source_image.file,
+                target_image.file
             ],
             size="1024x1024"
         )
 
-        return {"image": result.data[0].url}
+        return {"output_url": result.data[0].url}
 
     except Exception as e:
         return {"error": str(e)}
