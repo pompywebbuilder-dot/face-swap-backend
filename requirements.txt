@@ -1,4 +1,6 @@
 fastapi
 uvicorn
-openai
 python-multipart
+openai>=1.33.0
+pydantic
+starlette
